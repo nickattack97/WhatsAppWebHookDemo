@@ -11,11 +11,11 @@ string? mytoken = config?.GetSection("AppSettings").GetSection("MyToken").Value;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.MapGet("/webhook", async context => {
+app.MapGet("/webhooks", async context => {
     
-    var mode = context.Request.Form["hub.mode"].ToString();
-    var challenge = context.Request.Form["hub.challenge"].ToString();
-    var token = context.Request.Form["hub.verify_token"].ToString();
+    var mode = context.Request.Query["hub.mode"].ToString();
+    var challenge = context.Request.Query["hub.challenge"].ToString();
+    var token = context.Request.Query["hub.verify_token"].ToString();
 
     if(mode != null && token != null)
     {
