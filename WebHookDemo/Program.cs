@@ -22,7 +22,7 @@ app.MapGet("/webhook", async context => {
         if(mode == "subscribe" && token == mytoken)
         {
             await context.Response.WriteAsync(challenge);
-            context.Response.StatusCode = StatusCodes.Status200OK;
+            //context.Response.StatusCode = StatusCodes.Status200OK;
             return;
         }
         else
@@ -52,9 +52,9 @@ app.MapPost("/webhook", async context => {
             var from = message?.entry[0].changes[0].value.messages[0].from;
             var msgBody = message?.entry[0].changes[0].value.messages[0].text.body;
 
-            await context.Response.WriteAsync(String.IsNullOrEmpty(phoneNumId) ? "EmptyPhone": phoneNumId);
-            await context.Response.WriteAsync(String.IsNullOrEmpty(from) ? "FromPhone" : from);
-            await context.Response.WriteAsync(String.IsNullOrEmpty(msgBody) ? "EmptyMsg" : msgBody);
+            //await context.Response.WriteAsync(String.IsNullOrEmpty(phoneNumId) ? "EmptyPhone": phoneNumId);
+            //await context.Response.WriteAsync(String.IsNullOrEmpty(from) ? "FromPhone" : from);
+            //await context.Response.WriteAsync(String.IsNullOrEmpty(msgBody) ? "EmptyMsg" : msgBody);
 
             var options = new RestClientOptions("https://graph.facebook.com")
             {
