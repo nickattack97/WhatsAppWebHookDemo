@@ -41,7 +41,7 @@ namespace WebHookDemo.Models
             public string name { get; set; }
         }
 
-        public class Root
+        public class WhatsAppMessageRoot
         {
             public string @object { get; set; }
             public List<Entry> entry { get; set; }
