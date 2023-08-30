@@ -11,7 +11,7 @@ string? mytoken = config?.GetSection("AppSettings").GetSection("MyToken").Value;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.MapGet("/webhooks", async context => {
+app.MapGet("/webhook", async context => {
     
     var mode = context.Request.Query["hub.mode"].ToString();
     var challenge = context.Request.Query["hub.challenge"].ToString();
