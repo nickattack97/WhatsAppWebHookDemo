@@ -36,13 +36,14 @@ app.MapGet("/webhook", async context => {
 
 app.MapPost("/webhook", async context => {
 
+    Console.WriteLine("In Post Endpoint");
     var reader = new StreamReader(context.Request.Body);
     string body = reader.ReadToEndAsync().Result;
 
     WhatsAppMessageRoot? message = JsonConvert.DeserializeObject<WhatsAppMessageRoot>(body);
 
 
-    await context.Response.WriteAsync(body);
+    Console.WriteLine(body); //print request
 
     if (body.Contains("object"))
     {
@@ -52,9 +53,9 @@ app.MapPost("/webhook", async context => {
             var from = message?.entry[0].changes[0].value.messages[0].from;
             var msgBody = message?.entry[0].changes[0].value.messages[0].text.body;
 
-            //await context.Response.WriteAsync(String.IsNullOrEmpty(phoneNumId) ? "EmptyPhone": phoneNumId);
-            //await context.Response.WriteAsync(String.IsNullOrEmpty(from) ? "FromPhone" : from);
-            //await context.Response.WriteAsync(String.IsNullOrEmpty(msgBody) ? "EmptyMsg" : msgBody);
+            Console.WriteLine(String.IsNullOrEmpty(phoneNumId) ? "EmptyPhone": phoneNumId);
+            Console.WriteLine(String.IsNullOrEmpty(from) ? "FromPhone" : from);
+            Console.WriteLine(String.IsNullOrEmpty(msgBody) ? "EmptyMsg" : msgBody);
 
             var options = new RestClientOptions("https://graph.facebook.com")
             {
@@ -80,7 +81,7 @@ app.MapPost("/webhook", async context => {
 
             request.AddStringBody(data, DataFormat.Json);
             await client.ExecuteAsync(request);
-            context.Response.StatusCode = StatusCodes.Status200OK;
+            //context.Response.StatusCode = StatusCodes.Status200OK;
             return;
         }
         else
@@ -94,7 +95,7 @@ app.MapPost("/webhook", async context => {
 });
 
 app.MapGet("/", async context => {
-    context.Response.StatusCode = StatusCodes.Status200OK;
+    //context.Response.StatusCode = StatusCodes.Status200OK;
     await context.Response.WriteAsync("Demo Webook Tes");
     return;
 });
