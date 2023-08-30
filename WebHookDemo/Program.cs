@@ -7,6 +7,7 @@ using IHost host = Host.CreateDefaultBuilder(args).Build();
 IConfiguration? config = host.Services.GetService<IConfiguration>();
 
 string? mytoken = config?.GetSection("AppSettings").GetSection("MyToken").Value;
+string? accessToken = config?.GetSection("AppSettings").GetSection("WhatsappToken").Value;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -63,7 +64,7 @@ app.MapPost("/webhook", async context => {
             };
 
             var client = new RestClient(options);
-            var request = new RestRequest("/v17.0/" + phoneNumId + "/messages", Method.Post);
+            var request = new RestRequest("/v17.0/" + phoneNumId + "/messages?access_token="+accessToken, Method.Post);
 
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", "Bearer EAAEBPxMPSAUBOwj3mDZAKzMyj2SbasRFPJdHIRnGpTIfz7NyvPBrnW41xrZAsBHFZBJ7x44tT5st3Ukalciivk7WnHlOMntZCmC5LnZCLH6hFNdM1cTL5ZAH7enZA1AZBjMZCbHlFxW7OknzxPnE0T7VeShQg4zsOTpW51FeGVKq4y6r1oMIqZCbcEEsnqrO0LlDhKPuatoAwLa38OdMwofdyFkCdSfizY4KBg8v4ZD");
