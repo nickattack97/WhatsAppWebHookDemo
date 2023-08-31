@@ -7,14 +7,15 @@ using IHost host = Host.CreateDefaultBuilder(args).Build();
 IConfiguration? config = host.Services.GetService<IConfiguration>();
 
 string? mytoken = config?.GetSection("AppSettings").GetSection("MyToken").Value;
-string? accessToken = config?.GetSection("AppSettings").GetSection("WhatsappToken").Value;
+string? bearerToken = config?.GetSection("AppSettings").GetSection("BearerToken").Value;
+string? baseUrl = config?.GetSection("AppSettings").GetSection("BaseUrl").Value;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
 app.MapGet("/webhook", async context => {
 
-    Console.WriteLine("in get endpoint");
+    Console.WriteLine("In Get Endpoint");
     var mode = context.Request.Query["hub.mode"].ToString();
     var challenge = context.Request.Query["hub.challenge"].ToString();
     var token = context.Request.Query["hub.verify_token"].ToString();
@@ -24,7 +25,6 @@ app.MapGet("/webhook", async context => {
         if(mode == "subscribe" && token == mytoken)
         {
             await context.Response.WriteAsync(challenge);
-            //context.Response.StatusCode = StatusCodes.Status200OK;
             Console.WriteLine(challenge);
             return;
         }
@@ -45,8 +45,7 @@ app.MapPost("/webhook", async context => {
 
     WhatsAppMessageRoot? message = JsonConvert.DeserializeObject<WhatsAppMessageRoot>(body);
 
-
-    Console.WriteLine(body); //print request
+    Console.WriteLine(body);
 
     if (body.Contains("object"))
     {
@@ -60,16 +59,16 @@ app.MapPost("/webhook", async context => {
             Console.WriteLine(String.IsNullOrEmpty(from) ? "FromPhone" : from);
             Console.WriteLine(String.IsNullOrEmpty(msgBody) ? "EmptyMsg" : msgBody);
 
-            var options = new RestClientOptions("https://graph.facebook.com")
+            var options = new RestClientOptions(baseUrl)
             {
                 MaxTimeout = -1,
             };
 
             var client = new RestClient(options);
-            var request = new RestRequest("/v17.0/" + phoneNumId + "/messages?access_token="+accessToken, Method.Post);
+            var request = new RestRequest("/v17.0/" + phoneNumId + "/messages", Method.Post);
 
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer EAAEBPxMPSAUBOwj3mDZAKzMyj2SbasRFPJdHIRnGpTIfz7NyvPBrnW41xrZAsBHFZBJ7x44tT5st3Ukalciivk7WnHlOMntZCmC5LnZCLH6hFNdM1cTL5ZAH7enZA1AZBjMZCbHlFxW7OknzxPnE0T7VeShQg4zsOTpW51FeGVKq4y6r1oMIqZCbcEEsnqrO0LlDhKPuatoAwLa38OdMwofdyFkCdSfizY4KBg8v4ZD");
+            request.AddHeader("Authorization", "Bearer " + bearerToken + "");
 
             var data = @"{" + "\n" +
                 @"    ""messaging_product"": ""whatsapp"",    " + "\n" +
@@ -78,7 +77,7 @@ app.MapPost("/webhook", async context => {
                 @"    ""type"": ""text""," + "\n" +
                 @"    ""text"": {" + "\n" +
                 @"        ""preview_url"": false," + "\n" +
-                @"        ""body"": ""Richgang test - " +msgBody+"\"" + "\n" +
+                @"        ""body"": ""Nick Dev Jedi Test - " +msgBody+"\"" + "\n" +
                 @"    }" + "\n" +
                 @"}";
 
@@ -97,8 +96,7 @@ app.MapPost("/webhook", async context => {
 });
 
 app.MapGet("/", async context => {
-    //context.Response.StatusCode = StatusCodes.Status200OK;
-    await context.Response.WriteAsync("Demo Webook Tes");
+    await context.Response.WriteAsync(".NET 7 Demo Webook Test");
     return;
 });
 
