@@ -83,8 +83,7 @@ app.MapPost("/webhook", async context => {
                 @"}";
 
             request.AddStringBody(data, DataFormat.Json);
-            RestResponse response = await client.ExecuteAsync(request);
-            //context.Response.StatusCode = StatusCodes.Status200OK;
+            await client.ExecuteAsync(request);
             return;
         }
         else
