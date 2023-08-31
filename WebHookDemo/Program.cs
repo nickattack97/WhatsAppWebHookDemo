@@ -13,7 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
 app.MapGet("/webhook", async context => {
-    
+
+    Console.WriteLine("in get endpoint")
     var mode = context.Request.Query["hub.mode"].ToString();
     var challenge = context.Request.Query["hub.challenge"].ToString();
     var token = context.Request.Query["hub.verify_token"].ToString();
@@ -24,6 +25,7 @@ app.MapGet("/webhook", async context => {
         {
             await context.Response.WriteAsync(challenge);
             //context.Response.StatusCode = StatusCodes.Status200OK;
+            Console.WriteLine(challenge);
             return;
         }
         else
