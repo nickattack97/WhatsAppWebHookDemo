@@ -74,16 +74,16 @@ app.MapPost("/webhook", async context => {
             var data = @"{" + "\n" +
                 @"    ""messaging_product"": ""whatsapp"",    " + "\n" +
                 @"    ""recipient_type"": ""individual""," + "\n" +
-                @"    ""to"": "+from+"," + "\n" +
+                @"    ""to"": """+from+"\"," + "\n" +
                 @"    ""type"": ""text""," + "\n" +
                 @"    ""text"": {" + "\n" +
                 @"        ""preview_url"": false," + "\n" +
-                @"        ""body"": ""Richgang test" +msgBody+"" + "\n" +
+                @"        ""body"": """"Richgang test - " +msgBody+"\"" + "\n" +
                 @"    }" + "\n" +
                 @"}";
 
             request.AddStringBody(data, DataFormat.Json);
-            await client.ExecuteAsync(request);
+            RestResponse response = await client.ExecuteAsync(request);
             //context.Response.StatusCode = StatusCodes.Status200OK;
             return;
         }
