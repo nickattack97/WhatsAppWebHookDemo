@@ -78,7 +78,7 @@ app.MapPost("/webhook", async context => {
                 @"    ""type"": ""text""," + "\n" +
                 @"    ""text"": {" + "\n" +
                 @"        ""preview_url"": false," + "\n" +
-                @"        ""body"": """"Richgang test - " +msgBody+"\"" + "\n" +
+                @"        ""body"": ""Richgang test - " +msgBody+"\"" + "\n" +
                 @"    }" + "\n" +
                 @"}";
 
